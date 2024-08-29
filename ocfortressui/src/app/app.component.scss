@@ -1,0 +1,52 @@
+.app-header{
+  background-color:  rgb(177, 193, 206);
+  height: 7vh;
+  align-items: center;
+}
+
+.app-logo{
+  flex: 1 1 auto;
+  margin-left: 20px;
+  align-items: center;
+  display: flex;
+  color: white;
+  font-size: larger;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.ogon-logo{
+  margin-right: 20px;
+  margin-top: 11px;
+}
+
+.umv-logo{
+  margin-right: 20px;
+  margin-top: 11px;
+}
+
+mat-icon {
+  transform: scale(0.6);
+  display: inline-flex;
+  vertical-align: middle;
+  color: white;
+}
+
+.copyrightContainer {
+  margin-right: 20px;
+  margin-top: 10px;
+}
+
+.app-footer{
+  background-color: rgb(177, 193, 206);
+  height: 5vh;
+  align-items: right;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+}
+
+.spacer {
+  flex: 1;
+}
+
+

@@ -1,0 +1,21 @@
+<mat-dialog-content>
+  <h4> Create New Bundle</h4>
+  <mat-form-field style="width: 100%;">
+    <mat-label>Bundle Name</mat-label>
+    <input matInput [(ngModel)]="bundleName" required="true">
+  </mat-form-field>
+  <mat-form-field style="width: 100%;">
+    <mat-label>Description</mat-label>
+    <input matInput [(ngModel)]="description" required="true">
+  </mat-form-field>
+  <h4>Selected Test Cases</h4>
+  <mat-list>
+    @for(bundleItem of _bundleService.bundledTestCases; track bundleItem){
+    <mat-list-item>{{bundleItem.testCaseName}}</mat-list-item>
+    }
+  </mat-list>
+  <mat-dialog-actions>
+    <button mat-raised-button (click)="onCancelClick()">No Thanks</button>
+    <button mat-raised-button (click)="saveBundle()" cdkFocusInitial>Save</button>
+  </mat-dialog-actions>
+</mat-dialog-content>

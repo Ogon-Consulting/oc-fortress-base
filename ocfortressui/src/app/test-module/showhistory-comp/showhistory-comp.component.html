@@ -1,0 +1,116 @@
+<div class="spinner-menu-bar">
+  <div class="spinner-div">
+    @if(_productList.showSpinner){
+    <mat-progress-spinner mode="indeterminate" color="primary" diameter="47"></mat-progress-spinner>
+    <div class="spinner-text">
+      {{_productList.spinnerText}}
+    </div>
+    }
+  </div>
+  <div class="spinner-div">
+    @if(_productList.showTestExecutionSpinner){
+    <mat-progress-spinner mode="indeterminate" color="primary" diameter="47"></mat-progress-spinner>
+    <div class="spinner-text">
+      {{_productList.spinnerTestExecutionText}}
+    </div>
+    }
+  </div>
+  <button mat-icon-button (click)="sidenav.toggle()">
+    <mat-icon style="color:black;">menu</mat-icon>
+  </button>
+</div>
+<div style="display: flex; align-items: center; height: 35px;">
+  <h2 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin-left: 10px">Job Detailed
+    History</h2>
+  <img src="../../../assets/refresh.svg" (click)="getHistory()" matTooltip="Refresh Job Detailed History"
+    style="cursor: pointer; width: 40px; height: 40px; margin-left: 0.25%; margin-right: 20px;">
+</div>
+<div class="main-container">
+  <div name="page-content-div">
+    <mat-sidenav-container>
+      <mat-sidenav #sidenav mode="push" position="end">
+        <a mat-flat-button (click)="_routingService.goToHome();sidenav.close();"><mat-icon>home</mat-icon> Home</a>
+        <a mat-flat-button (click)="_productList.refreshProducts();sidenav.close();"><mat-icon>refresh</mat-icon>
+          Refresh Products</a>
+        <a mat-flat-button (click)="_routingService.routeToHistory();sidenav.close();"><mat-icon>history</mat-icon>
+          History</a>
+        <a mat-flat-button (click)="_routingService.routeToJobLog();sidenav.close();"><mat-icon>list_alt</mat-icon> Job
+          Log</a>
+        <a mat-flat-button
+          (click)="_routingService.goToScheduleHistory();sidenav.close();"><mat-icon>schedule</mat-icon>Job
+          Schedules</a>
+        <a mat-flat-button
+          (click)="_routingService.goToBundlesList();sidenav.close();"><mat-icon>schedule</mat-icon>Bundles</a>
+          <a mat-flat-button
+            (click)="_routingService.routeToUserManagement();sidenav.close();"><mat-icon>supervised_user_circle</mat-icon>Manage Users</a>
+        <a mat-flat-button (click)="_routingService.goTologin();sidenav.close();"><mat-icon>power_settings_new</mat-icon>
+          Logout</a>
+      </mat-sidenav>
+      <mat-sidenav-content>
+        <div name="mainContent">
+          @if(_productList.loadedTestCaseHistory){
+          <div name="showHistoryDiv">
+            <ng-container *ngFor="let entry of _productList.loadedTestCaseHistory">
+              <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <button mat-icon-button mat-expansion-panel-header-icon (click)="togglePanel(entry)">
+                      <mat-icon>{{ isPanelExpanded(entry) ? 'expand_less' : 'expand_more' }}</mat-icon>
+                    </button>
+                    <b>{{ entry.key }}</b>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <table mat-table [dataSource]="entry.values">
+                  <ng-container matColumnDef="product">
+                    <th mat-header-cell *matHeaderCellDef> Product </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.product }} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="testCaseName">
+                    <th mat-header-cell *matHeaderCellDef> Test Case Name </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.testCaseName }} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="referenceNumber">
+                    <th mat-header-cell *matHeaderCellDef> Reference Number</th>
+                    <td mat-cell *matCellDef="let element"> {{ element.referenceNumber }} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="testStatus">
+                    <th mat-header-cell *matHeaderCellDef> Status </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.testStatus }} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="executedOn">
+                    <th mat-header-cell *matHeaderCellDef> Executed On </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.executedOn }} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="executedBy">
+                    <th mat-header-cell *matHeaderCellDef> Executed By </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.executedBy }} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="jobId">
+                    <th mat-header-cell *matHeaderCellDef> Job ID </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.jobId }} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="testResult">
+                    <th mat-header-cell *matHeaderCellDef> Test Result </th>
+                    <td mat-cell *matCellDef="let element"> {{ element.testResult }} </td>
+                  </ng-container>
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"
+                    style="background-color: rgb(177, 193, 206); font-weight: bold;"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+                  </tr>
+                </table>
+                <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+              </mat-expansion-panel>
+            </ng-container>
+          </div>
+          }@else {
+          <div class="spinner-div">
+            <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="fire" [fullScreen]="true">
+              <p style="color: white"> Loading history... </p>
+            </ngx-spinner>
+          </div>
+          }
+        </div>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+  </div>
+</div>

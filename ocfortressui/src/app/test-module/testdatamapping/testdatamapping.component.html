@@ -1,0 +1,59 @@
+<mat-card class="card-container">
+  <div class="card-content">
+    <button class="resetButton" mat-raised-button color="primary" (click)="resetNewValue()">Reset</button>
+    <button class="saveButton" mat-raised-button color="primary" (click)="save()">Save As</button>
+    <button class="cancelButton" mat-raised-button color="primary" (click)="cancel()">Cancel</button>
+    @for(testcase of _testService.menuItems; track testcase; let testCaseIndex = $index){
+    <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <h3>{{testcase.testCaseId}}</h3>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      @for(menu of testcase.menus; let menuIndex = $index; track menu){
+      <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <h3>{{menu.menuName}}</h3>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="table-container">
+
+          <table mat-table [dataSource]="menu.fields" class="mat-elevation-z8">
+            <ng-container matColumnDef="label">
+              <th mat-header-cell *matHeaderCellDef>
+                <h3>Field</h3>
+              </th>
+              <td mat-cell *matCellDef="let field"> {{ field.label }} </td>
+            </ng-container>
+            <ng-container matColumnDef="defaultValue">
+              <th mat-header-cell *matHeaderCellDef>
+                <h3>Default Value</h3>
+              </th>
+              <td mat-cell *matCellDef="let field">
+                <mat-label>{{field.defaultValue}}</mat-label>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="newValue">
+              <th mat-header-cell *matHeaderCellDef>
+                <h3>New Value</h3>
+              </th>
+              <td mat-cell *matCellDef="let field;let fieldIndex = index">
+                @if(field.readOnly == "No"){
+                <mat-form-field appearance="fill">
+                  <input matInput [value]="field.newValue"
+                    (change)="getLatestValue(testCaseIndex, menuIndex, fieldIndex, $event)">
+                </mat-form-field>
+                }
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+      </mat-expansion-panel>
+      }
+    </mat-expansion-panel>
+    }
+  </div>
+</mat-card>

@@ -1,0 +1,39 @@
+<div class="main-container">
+  <mat-sidenav-container>
+    <mat-sidenav #sidenav mode="push" position="end">
+      <a mat-flat-button [routerLink]="['/test']" (click)="sidenav.close();">Home</a>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <div>
+        <mat-grid-list cols="1" rowHeight="7:1">
+          <mat-grid-tile>
+            <img src="../../../assets/fortress-logo-transparent-svg.svg" width="200" height="200">
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-card>
+              <div >
+              <mat-card-header>
+                <mat-card-title>Login</mat-card-title>
+                <mat-label *ngIf="showLoginMessage" class="login-failure">{{loginFailureMessage}}</mat-label>
+              </mat-card-header>
+            </div>
+              <mat-card-content>
+                <div class="loginContent">
+                  <form [formGroup]="loginForm">
+                    <mat-form-field>
+                      <input matInput placeholder="User Name" formControlName="userName">
+                    </mat-form-field>
+                    <mat-form-field>
+                      <input matInput type="password" placeholder="Enter your password" formControlName="password">
+                    </mat-form-field>
+                    <button class="loginbutton" mat-raised-button (click)="verifyUser()">Login</button>
+                  </form>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </mat-grid-tile>
+        </mat-grid-list>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

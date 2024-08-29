@@ -1,0 +1,27 @@
+<mat-dialog-content>
+  <h4>Please select User and Role</h4>
+  <mat-form-field appearance="fill">
+    <mat-label>Select Role</mat-label>
+    <mat-select [(ngModel)]="_insuranceNowUserService.executionUserRole" (selectionChange)="_insuranceNowUserService.onRoleChange($event)" required>
+      @for (role of _insuranceNowUserService.roles; track $index) {
+      <mat-option [value]="role">{{ role }}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Select User</mat-label>
+    <mat-select [(ngModel)]="_insuranceNowUserService.executionUserLoginId" required>
+      @for (filteredUser of _insuranceNowUserService.filteredUsers; track $index) {
+      <mat-option [value]="filteredUser.loginId">{{ filteredUser.firstName }} {{filteredUser.lastName}}</mat-option>
+      }
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Password</mat-label>
+    <input matInput [(ngModel)]="_insuranceNowUserService.executionUserPassword" type="password" required placeholder="">
+  </mat-form-field>
+  <mat-dialog-actions>
+    <button mat-raised-button (click)="onCancelClick()">Cancel</button>
+    <button mat-raised-button (click)="proceed()" cdkFocusInitial>Proceed</button>
+  </mat-dialog-actions>
+</mat-dialog-content>

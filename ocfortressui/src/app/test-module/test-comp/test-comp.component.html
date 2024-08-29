@@ -1,0 +1,188 @@
+<div class="main-container">
+  <div class="spinner-menu-bar">
+
+    <div class="spinner-div">
+      @if(_productList.showSpinner){
+      <mat-progress-spinner mode="indeterminate" color="primary" diameter="47"></mat-progress-spinner>
+      <div class="spinner-text">
+        {{_productList.spinnerText}}
+      </div>
+      }
+    </div>
+    <div class="spinner-div-test-exec">
+      @if(_productList.showTestExecutionSpinner){
+      <mat-progress-spinner mode="indeterminate" color="primary" diameter="47"></mat-progress-spinner>
+      <div class="spinner-text">
+        {{_productList.spinnerTestExecutionText}}
+      </div>
+      }
+    </div>
+    <span class="label-text" style="font-weight: bold; margin-right: 5%;">Login User: {{_loginService.loggedUserName}}</span>
+    <div>
+      <button mat-icon-button (click)="sidenav.toggle()">
+        <mat-icon style="color:black;">menu</mat-icon>
+      </button>
+    </div>
+
+  </div>
+
+  <div name="page-content-div">
+
+    <div name="sidenav-div" >
+
+      <mat-sidenav-container >
+        <mat-sidenav #sidenav mode="push" position="end">
+          <a mat-flat-button (click)="_routingService.goToHome();sidenav.close();"><mat-icon>home</mat-icon> Home</a>
+          <a mat-flat-button (click)="_productList.refreshProducts();sidenav.close();"><mat-icon>refresh</mat-icon>
+            Refresh Products</a>
+          <a mat-flat-button (click)="_routingService.routeToHistory();sidenav.close();"><mat-icon>history</mat-icon>
+            History</a>
+          <a mat-flat-button (click)="_routingService.routeToJobLog();sidenav.close();"><mat-icon>list_alt</mat-icon>
+            Job
+            Log</a>
+          <a mat-flat-button
+            (click)="_routingService.goToScheduleHistory();sidenav.close();"><mat-icon>schedule</mat-icon>Job
+            Schedules</a>
+          <a mat-flat-button
+            (click)="_routingService.goToBundlesList();sidenav.close();"><mat-icon>schedule</mat-icon>Bundles</a>
+          <a mat-flat-button
+            (click)="_routingService.routeToUserManagement();sidenav.close();"><mat-icon>supervised_user_circle</mat-icon>Manage
+            Users</a>
+          <a mat-flat-button
+            (click)="_routingService.goTologin();sidenav.close();"><mat-icon>power_settings_new</mat-icon>
+            Logout</a>
+        </mat-sidenav>
+        <mat-sidenav-content>
+          <div name="products-list-div">
+            <br>
+            <div>
+              <form [formGroup]="formInputFields" *ngIf="!loading">
+                <mat-card class="card-container">
+                  <div class="card-content">
+                    <mat-form-field>
+                      <mat-label>Carrier</mat-label>
+                      <mat-select matInput formControlName="carrierId" (selectionChange)="getCarrierStates($event)">
+                        @for (carrier of _productList.carriersArray; track $index) {
+                        <mat-option [value]="carrier.carrierId">{{ carrier.carrierName }}</mat-option>
+                        }
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-form-field>
+                      <mat-label>State</mat-label>
+                      <mat-select matInput formControlName="stateCd"
+                        (selectionChange)="getCarrierStateProducts($event)">
+                        @for (state of _productList.carrierStatesArray; track $index) {
+                        <mat-option [value]="state.stateCode">{{ state.stateName }}</mat-option>
+                        }
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-form-field>
+                      <mat-label>Product</mat-label>
+                      <mat-select matInput formControlName="productSelected" (selectionChange)="setProduct($event)">
+                        @for (product of _productList.carrierStateProductArray; track $index) {
+                        <mat-option [value]="product.productCode">{{ product.productName }}</mat-option>
+                        }
+                      </mat-select>
+                    </mat-form-field>
+                    <br>
+                    @if( inputProductSet ){
+                    <div>
+                      <button class="loadButton" mat-raised-button (click)="fetchTestCases()">Load
+                        TestCases</button>
+                    </div>
+                    }
+                  </div>
+                </mat-card>
+              </form>
+            </div>
+            <br>
+          </div>
+          @if(_productList.showTestCaseList){
+          <div style="display: flex;flex-direction: row;">
+            <div>
+              <img src="../../../assets/start1.svg" (click)="startTest()" matTooltip="Start Test"
+                style="cursor: pointer; width: 60px; height: 60px; margin-left: 1%; margin-bottom: 5px;">
+            </div>
+            <div>
+              <img src="../../../assets/schedule1.svg" (click)="scheduleTestCase()" matTooltip="Schedule Test Job"
+                style="cursor: pointer; width: 60px; height: 60px; margin-left: 1%; margin-bottom: 5px;">
+            </div>
+            <div>
+              <img src="../../../assets/bundlebox.svg" (click)="bundleTestCase()" matTooltip="Bundle Test Cases"
+                style="cursor: pointer; width: 60px; height: 60px; margin-left: 1%; margin-bottom: 5px;">
+            </div>
+            <div style="display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            margin-top: 1%;
+            margin-left: -.25%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: cadetblue;
+            border-radius: 50%;"><b>{{_bundleService.bundledTestCases.length}}</b></div>
+          </div>
+          }
+          <div name="table-div">
+            <table mat-table [dataSource]="_productList.dataSource" class="mat-elevation-z8 demo-table">
+              <ng-container matColumnDef="testCaseCheckBox">
+                <th mat-header-cell *matHeaderCellDef>Select</th>
+                <td mat-cell *matCellDef="let element; let j = index">
+                  <mat-checkbox (change)="updateCheckedRow(j, $event)"></mat-checkbox>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="testCase">
+                <th mat-header-cell *matHeaderCellDef>Test Case</th>
+                <td mat-cell *matCellDef="let element">{{element.testCaseName}}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="transactionCd">
+                <th mat-header-cell *matHeaderCellDef>Transaction Code</th>
+                <td mat-cell *matCellDef="let element">{{element.transactionCd}}</td>
+              </ng-container>
+              <ng-container matColumnDef="executedOn">
+                <th mat-header-cell *matHeaderCellDef>Last Executed On</th>
+                <td mat-cell *matCellDef="let element">{{element.executedOn}}</td>
+              </ng-container>
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef>Status</th>
+                <td mat-cell *matCellDef="let element">{{element.testStatus}}</td>
+              </ng-container>
+              <ng-container matColumnDef="referenceNumber">
+                <th mat-header-cell *matHeaderCellDef>Reference Number</th>
+                <td mat-cell *matCellDef="let element">{{element.referenceNumber}}</td>
+              </ng-container>
+              <ng-container matColumnDef="executedBy">
+                <th mat-header-cell *matHeaderCellDef>Executed By</th>
+                <td mat-cell *matCellDef="let element">{{element.executedBy}}</td>
+              </ng-container>
+              <ng-container matColumnDef="jobId">
+                <th mat-header-cell *matHeaderCellDef>Job ID</th>
+                <td mat-cell *matCellDef="let element">{{element.jobId}}</td>
+              </ng-container>
+              <ng-container matColumnDef="testResult">
+                <th mat-header-cell *matHeaderCellDef>Message</th>
+                <td mat-cell *matCellDef="let element">{{element.testResult}}</td>
+              </ng-container>
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>Actions</th>
+                <td mat-cell *matCellDef="let element; let i = index">
+                  <img src="../../../assets/editbutton.svg" (click)="configTestData(i)" matTooltip="Customize Test Data"
+                    style="cursor: pointer; width: 25px; height: 25px;">
+                  <img src="../../../assets/bundle.svg" (click)="addToBundle(i)" matTooltip="Bundle Test Case"
+                    style="cursor: pointer; width: 25px; height: 25px;">
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"
+                style="background-color: rgb(177, 193, 206); font-weight: bold; font-size: 16px;"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            <mat-paginator [pageSize]="20" [pageSizeOptions]="[20,50,100]" showFirstLastButtons></mat-paginator>
+          </div>
+        </mat-sidenav-content>
+      </mat-sidenav-container>
+    </div>
+  </div>
+  <div>
+  </div>
+</div>

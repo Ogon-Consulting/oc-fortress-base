@@ -1,0 +1,34 @@
+<div class="main-container">
+  <mat-card class="card-container">
+    <div class="card-content">
+    <mat-form-field appearance="fill">
+      <mat-label>User Name</mat-label>
+      <input matInput [(ngModel)]="_userService.userToBeEdited.userName" placeholder="Enter user name" disabled="true">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Password</mat-label>
+      <input matInput type="password" [(ngModel)]="_userService.userToBeEdited.password" placeholder="Enter password">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" [(ngModel)]="_userService.userToBeEdited.emailId" placeholder="Enter email" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Role</mat-label>
+      <mat-select [(ngModel)]="_userService.userToBeEdited.role" required>
+        @for(role of _userService.roles; track role){
+          <mat-option [value]="role">{{ role }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <div style="display: flex; justify-content: space-between;">
+      <button mat-raised-button class="userButton" (click)="editUser()">Save</button>
+      <button mat-raised-button class="userButton" (click)="_routingService.routeToUserManagement()">Back</button>
+    </div>
+  </div>
+  </mat-card>
+
+  </div>

@@ -1,0 +1,106 @@
+.main-container{
+  min-height: 78.1vh;
+}
+
+.card-container {
+  justify-content: center;
+  margin-left: 37%;
+  //margin-top: 1%;
+  width: 25%;
+  margin-bottom: 0.5%;
+}
+
+.card-content {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 10;
+  //margin-top: 2%;
+  margin-left: 5%;
+  margin-bottom: 2%;
+}
+
+.searchUserButton, .addUserButton, .resetButton{
+  //margin-left: 16px;
+  background-color: #1d3354;
+  color: white;
+}
+.searchUserButton, .resetButton{
+  margin-right: 16px;
+}
+
+.optionsdiv{
+  display: flex;
+}
+
+.addUserdiv{
+  margin-top: 1%;
+  margin-left: 25%;
+}
+
+
+.searchdiv{
+  justify-content: space-between;
+  align-items: center;
+  //gap: 16px;
+  margin-right: 1%;;
+ }
+
+ .partialsearchdiv,.rolesearchdiv{
+  display: flex;
+  gap: 16px;
+  margin-right: 1%;;
+ }
+
+
+.formtextclass{
+  font-weight: bold;
+}
+
+.spinner-div{
+  display: flex;
+  flex: 1 1 auto;
+  margin-left: 1%;
+  height: 57px;
+
+}
+.spinner-div-test-exec{
+  display: flex;
+  flex: 1 1 auto;
+  height: 57px;
+  width:450px;
+}
+
+.spinner-text{
+  margin-left: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 10;
+  margin-top: 12px;
+}
+
+.spinner-menu-bar{
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+}
+
+mat-sidenav-container {
+  min-height: 78.1vh;
+  width: 100%;
+
+
+
+  mat-sidenav {
+    min-width: 15vw;
+    max-width: min-content;
+    a {
+      padding: 0.5rem 0.75rem;
+      width: 100%;
+      border-radius: 0;
+      &.active {
+        background-color: var(--primary-color);
+        color: white;
+      }
+    }
+  }
+}

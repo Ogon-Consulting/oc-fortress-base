@@ -1,0 +1,22 @@
+.form-container {
+  display: flex;
+  flex-direction: column;
+  width: 700px; /* Adjust the width as needed */
+  margin: 0 auto; /* Center the form */
+}
+
+.form-container mat-form-field {
+  width: 100%; /* Make each form field take the full width */
+  margin-bottom: 16px; /* Add space between the form fields */
+}
+
+.form-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.form-row mat-form-field {
+  width: 48%; /* Adjust the width to have two fields in a row */
+  margin-bottom: 16px;
+}
+

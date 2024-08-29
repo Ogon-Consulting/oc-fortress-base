@@ -1,0 +1,98 @@
+<mat-dialog-content>
+  <h4>Choose Date and Time to Schedule Test Job</h4>
+  <div>
+  <mat-form-field appearance="fill">
+    <mat-label>Choose a date</mat-label>
+    <input matInput [matDatepicker]="picker" [formControl]="selectedDate">
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Choose a time</mat-label>
+    <input matInput type="time" [formControl]="selectedTime">
+  </mat-form-field>
+</div>
+<div class="form-container">
+  <h4>Or Choose</h4>
+  <br>
+  <div class="form-row">
+    <mat-form-field appearance="fill">
+      <mat-label>Day of the week</mat-label>
+      <mat-select [formControl]="dayOfTheWeek">
+        @for(day of daysOfWeek; track day){
+          <mat-option [value]="day.value">{{day.viewValue}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Month</mat-label>
+      <mat-select [formControl]="month">
+        @for(mth of monthsOfYear; track mth){
+          <mat-option [value]="mth.value">{{mth.viewValue}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Day of the month</mat-label>
+      <mat-select [formControl]="dayOfTheMonth">
+        @for(day of daysOfMonth; track day){
+          <mat-option [value]="day.value">{{day.viewValue}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="form-row">
+    <mat-form-field appearance="fill">
+      <mat-label>Hour</mat-label>
+      <mat-select [formControl]="hour">
+        @for(hour of hoursOfTheDay; track hour){
+          <mat-option [value]="hour.value">{{hour.viewValue}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Minute</mat-label>
+      <mat-select [formControl]="minute">
+        @for(min of minutesOfHour; track min){
+          <mat-option [value]="min.value">{{min.viewValue}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Second</mat-label>
+      <mat-select [formControl]="second">
+        @for(sec of secondsOfMinutes; track sec){
+          <mat-option [value]="sec.value">{{sec.viewValue}}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>
+<mat-form-field appearance="fill">
+  <mat-label>Select Role</mat-label>
+  <mat-select [(ngModel)]="_insuranceNowUserService.executionUserRole" (selectionChange)="_insuranceNowUserService.onRoleChange($event)" required>
+    @for (role of _insuranceNowUserService.roles; track $index) {
+    <mat-option [value]="role">{{ role }}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>
+<mat-form-field appearance="fill">
+  <mat-label>Select User</mat-label>
+  <mat-select [(ngModel)]="_insuranceNowUserService.executionUserLoginId" required>
+    @for (filteredUser of _insuranceNowUserService.filteredUsers; track $index) {
+    <mat-option [value]="filteredUser.loginId">{{ filteredUser.firstName }} {{filteredUser.lastName}}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>
+<mat-form-field appearance="fill">
+  <mat-label>Password</mat-label>
+  <input matInput [(ngModel)]="_insuranceNowUserService.executionUserPassword" type="password" required placeholder="">
+</mat-form-field>
+
+  <mat-dialog-actions>
+    <button mat-raised-button (click)="onCancelClick()">Cancel</button>
+    <button mat-raised-button (click)="schedule()" cdkFocusInitial>Schedule</button>
+  </mat-dialog-actions>
+</mat-dialog-content>

@@ -1,0 +1,9 @@
+.mat-dialog-content {
+  max-height: 70vh; /* or any percentage/px value that works for your design */
+  overflow-y: auto;
+}
+
+.mat-list {
+  max-height: 30vh; /* Adjust this value as needed */
+  overflow-y: auto;
+}

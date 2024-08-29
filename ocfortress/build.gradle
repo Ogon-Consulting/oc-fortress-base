@@ -1,0 +1,142 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.3.2'
+	id 'io.spring.dependency-management' version '1.1.6'
+	id 'io.qameta.allure' version '2.8.1'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+sourceSets {
+	main {
+		java {srcDir 'src'}
+		resources {srcDir 'src'}
+	}
+	test {
+		java {srcDir 'test'}
+		resources {srcDir 'test'}
+	}
+}
+
+java {
+	sourceCompatibility = '17'
+}
+
+repositories {
+	mavenCentral()
+	maven {
+		url 'https://repo1.maven.org/maven2'
+	}
+	maven {
+		url 'https://mvnrepository.com/artifact'
+	}
+}
+
+allure {
+	autoconfigure = true
+	aspectjweaver = true
+	aspectjVersion = '1.9.4'
+	version = '2.10.0'
+}
+
+configurations {
+	testCompile
+	agent
+}
+
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	implementation 'org.springframework.boot:spring-boot-starter-quartz'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '1.2.0.RELEASE'
+	implementation 'junit:junit:4.13.2'
+	implementation 'com.codeborne:selenide-junit4:7.0.4'
+	implementation('org.seleniumhq.selenium:selenium-safari-driver:4.16.1') { transitive = false }
+	implementation group: 'org.assertj', name: 'assertj-core', version: '3.24.2'
+	implementation('io.qameta.allure:allure-selenide:2.13.0')
+	runtimeOnly('io.qameta.allure:allure-junit5:2.13.0')
+	implementation 'org.testng:testng:7.4.0'
+	implementation 'io.qameta.allure:allure-testng:2.26.0'
+	implementation 'org.tinylog:tinylog-api:2.0.0-M4'
+	implementation 'org.tinylog:tinylog-impl:2.0.0-M4'
+	compileOnly 'org.projectlombok:lombok:1.18.32'
+	annotationProcessor 'org.projectlombok:lombok:1.18.32'
+	compileOnly 'org.apache.httpcomponents:httpcore:4.4.1'
+	compileOnly 'org.apache.httpcomponents:httpclient:4.5.13'
+	testCompileOnly 'org.projectlombok:lombok:1.18.32'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.32'
+	runtimeOnly 'com.mysql:mysql-connector-j'
+	implementation 'org.apache.poi:poi:5.2.3'
+	implementation 'org.apache.poi:poi-ooxml:5.2.3'
+	implementation 'org.apache.logging.log4j:log4j-api:2.23.1'
+	implementation 'org.apache.logging.log4j:log4j-core:2.23.1'
+}
+
+
+[compileJava, compileTestJava]*.options.collect {options -> options.encoding = 'UTF-8'}
+[compileJava, compileTestJava]*.options.collect {options -> options.debug = true}
+
+tasks.withType(Test).all { testTask ->
+	testTask.systemProperties = [
+			'file.encoding': 'UTF-8',
+			'BUILD_URL': System.getenv()['BUILD_URL']
+	]
+	testTask.testLogging.showStandardStreams = true
+	testTask.exclude 'org/selenide/examples/google/classic_page_object/**/*'
+	testTask.outputs.upToDateWhen { false }
+}
+
+test {
+	//useTestNG() // or any other testing framework you're using
+	systemProperty "allure.results.directory", System.getenv()['BUILD_URL'] + '/allure-results'
+	useJUnitPlatform()
+	testLogging {
+		events "passed", "skipped", "failed"
+	}
+	if (project.hasProperty("HubUrl")) {
+		systemProperties['selenide.remote'] = HubUrl
+	}
+	if (project.hasProperty("Headless")) {
+		systemProperties['selenide.headless'] = Headless
+	}
+	if (project.hasProperty("Browser")) {
+		systemProperties['selenide.browser'] = Browser
+	}
+}
+
+
+task chrome(type: Test) {
+	systemProperties['selenide.browser'] = 'chrome'
+	systemProperties['selenide.headless'] = 'true'
+}
+
+task firefox(type: Test) {
+	systemProperties['selenide.browser'] = 'firefox'
+	systemProperties['selenide.headless'] = 'true'
+}
+
+task ie(type: Test) {
+	systemProperties['selenide.browser'] = 'ie'
+}
+
+task edge(type: Test) {
+	systemProperties['selenide.browser'] = 'edge'
+}
+
+// You must enable the 'Allow Remote Automation' option in Safari's Develop menu to control Safari via WebDriver.
+task safari(type: Test) {
+	systemProperties['selenide.browser'] = 'safari'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+tasks.test {
+	finalizedBy 'allureReport'
+}
+

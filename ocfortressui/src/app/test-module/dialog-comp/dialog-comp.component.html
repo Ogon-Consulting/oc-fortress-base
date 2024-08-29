@@ -1,0 +1,17 @@
+<div style="width: 95%; height: 100%; align-self: center;">
+  <mat-dialog-content
+    style="border-radius: 15px; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;">
+    <div class="dialog-message" name="message-div"
+      style="color: rgb(54, 54, 54); border-radius: 15px; padding: 20px; text-align: center;">
+
+      @if(testid !== ''){
+      {{message}}<b>{{ testid }}</b>.
+      }@else{
+      {{message}}.
+      }
+      @if(addtl_message !== ''){
+      <br>{{ addtl_message }}.
+      }
+    </div>
+  </mat-dialog-content>
+</div>
